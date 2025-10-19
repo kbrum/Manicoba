@@ -1,3 +1,3 @@
 module github.com/pupunha-code/Manicoba
 
-go 1.25
+go 1.18
