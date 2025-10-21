@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// Article mapeamento do dados do json para a struct
+// Article Mapeamento do dados do json para a struct
 type Article struct {
 	Title       string `json:"title"`
 	Description string `Json:"description"`
@@ -20,22 +20,31 @@ func FetchArticles(url string) Article {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal("Error:", err)
+		log.Fatal("HTTP GET error:", err)
 	}
 
-	defer resp.Body.Close()
+	// Fecha a conexão com o endpoint no final da função
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Fatal("Body close error:", err)
+		}
+	}(resp.Body)
 
+	// Acessa os dados da response e guarda na na slice do tipo []byte
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal("Error:", err)
+		log.Fatal("Error on HTTP response read:", err)
 	}
 
+	// Faz o unmarshal do bodyBytes, salva na struct, e trata possiveis erros
 	var articles []Article
 	err = json.Unmarshal(bodyBytes, &articles)
 	if err != nil {
-		log.Fatal("Error:", err)
+		log.Fatal("Json unmarshal error:", err)
 	}
 
+	// tratamento para retorno de 0 artigos
 	if len(articles) == 0 {
 		log.Fatal("No articles found")
 	}
