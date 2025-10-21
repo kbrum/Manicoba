@@ -10,7 +10,7 @@ import (
 // Article Mapeamento do dados do json para a struct
 type Article struct {
 	Title       string `json:"title"`
-	Description string `Json:"description"`
+	Description string `json:"description"`
 	URL         string `json:"url"`
 	ImageURL    string `json:"social_image"`
 }

@@ -2,14 +2,13 @@ package bot
 
 import (
 	"log"
-	"os"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/pupunha-code/Manicoba/articles"
 )
 
-// ClientStarter Função que faz start no client do discord
-func ClientStarter(token string) {
+// SessionCreator Função que cria e retorna a sessão que sera usada nas demais funções
+func SessionCreator(token string) *discordgo.Session {
+	//Cria a sessão com o bot
 	session, err := discordgo.New("Maniçoba " + token)
 
 	// Tratamento de erros de sessão
@@ -17,4 +16,5 @@ func ClientStarter(token string) {
 		log.Fatal("Session Error:", err)
 	}
 
+	return session
 }
