@@ -25,12 +25,7 @@ func FetchArticles(url string) (Article, error) {
 	}
 
 	// Fecha a conexão com o endpoint no final da função
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			return
-		}
-	}(resp.Body)
+	resp.Body.Close()
 
 	// trata codigos http diferentes de 200
 	if resp.StatusCode != 200 {
