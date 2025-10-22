@@ -28,8 +28,8 @@ func main() {
 	news, err := articles.FetchMorningNews()
 	if err != nil {
 		log.Print("Não foi possivel retornar os artigos: ", err)
+	} else {
+		bot.ArticleSender(session, channelID, news)
 	}
-
-	bot.ArticleSender(session, channelID, news)
 
 }
