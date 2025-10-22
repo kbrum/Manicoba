@@ -20,5 +20,16 @@ func main() {
 	token := os.Getenv("DISCORD_TOKEN")
 	channelID := os.Getenv("DISCORD_CHANNEL_ID")
 
-	bot.ArticleSender(bot.SessionCreator(token), channelID, articles.FetchMorningNews())
+	session, err := bot.SessionCreator(token)
+	if err != nil {
+		log.Fatal("Não foi possivel criar a seção: ", err)
+	}
+
+	news, err := articles.FetchMorningNews()
+	if err != nil {
+		log.Print("Não foi possivel retornar os artigos: ", err)
+	}
+
+	bot.ArticleSender(session, channelID, news)
+
 }
