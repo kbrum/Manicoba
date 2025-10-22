@@ -16,11 +16,12 @@ type Article struct {
 }
 
 // FetchArticles Função base que retorna o artigo que sera enviado
-func FetchArticles(url string) Article {
+func FetchArticles(url string) (Article, error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Print("HTTP GET error:", err)
+		return Article{}, err
 	}
 
 	// Fecha a conexão com o endpoint no final da função
@@ -49,20 +50,33 @@ func FetchArticles(url string) Article {
 		log.Print("No articles found")
 	}
 
-	return articles[0]
+	return articles[0], nil
 }
 
 // FetchMorningNews Noticias que serão mandadas as 9 horas (assuntos frontend)
 func FetchMorningNews() Article {
-	return FetchArticles("https://dev.to/api/articles?tags=javascript,typescript,react,nextjs,vue,angular,svelte,tailwindcss,vite&top=1")
+	// faz a solicitação
+	article, err := FetchArticles("https://dev.to/api/articles?tags=javascript,typescript,react,nextjs,vue,angular,svelte,tailwindcss,vite&top=1")
+	if err != nil {
+		log.Print("Não foi possivel fazer a solicitação:", err)
+	}
+	return article
 }
 
 // FetchAfternoonNews Noticias que serão mandadas as 14 horas (assuntos backend)
 func FetchAfternoonNews() Article {
-	return FetchArticles("https://dev.to/api/articles?tags=node,python,go,java,rust,springboot,django,fastapi,laravel,graphql,postgres,redis,backend,architecture")
+	article, err := FetchArticles("https://dev.to/api/articles?tags=node,python,go,java,rust,springboot,django,fastapi,laravel,graphql,postgres,redis,backend,architecture")
+	if err != nil {
+		log.Print("Não foi possivel fazer a solicitação:", err)
+	}
+	return article
 }
 
 // FetchNightNews Noticias que serão mandadas as 19 horas (assuntos devops/cloud)
 func FetchNightNews() Article {
-	return FetchArticles("https://dev.to/api/articles?tags=devops,aws,azure,gcp,docker,kubernetes,terraform,ansible,githubactions,cicd,prometheus,grafana,observability,security,linux")
+	article, err := FetchArticles("https://dev.to/api/articles?tags=devops,aws,azure,gcp,docker,kubernetes,terraform,ansible,githubactions,cicd,prometheus,grafana,observability,security,linux")
+	if err != nil {
+		log.Print("Não foi possivel fazer a solicitação:", err)
+	}
+	return article
 }
