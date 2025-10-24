@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
 	"github.com/pupunha-code/Manicoba/articles"
@@ -30,8 +32,8 @@ func main() {
 
 	c := cron.New() // cria o agendador
 
-	c.AddFunc("0 9 * * *", func() { // manda artigos de frontend
-		log.Println("Buscando artigos frontend")
+	c.AddFunc("0 9* * *", func() { // manda artigos de frontend
+		log.Println("Buscando artigos de Frontend")
 		article, err := articles.FetchArticles("javascript,typescript,react,nextjs,vue,angular,svelte,tailwindcss,vite&top=1")
 		if err != nil {
 			log.Println("Erro ao buscar artigo: ", err)
@@ -41,7 +43,7 @@ func main() {
 	})
 
 	c.AddFunc("30 12 * * *", func() { // manda artigos de backend
-		log.Println("Buscando artigos frontend")
+		log.Println("Buscando artigos de Bakcend")
 		article, err := articles.FetchArticles("node,python,go,java,rust,springboot,django,fastapi,laravel,graphql,postgres,redis,backend,architecture")
 		if err != nil {
 			log.Println("Erro ao buscar artigo: ", err)
@@ -50,8 +52,8 @@ func main() {
 		}
 	})
 
-	c.AddFunc(" 18 * * *", func() { // manda artigos de devops e cloud
-		log.Println("Buscando artigos frontend")
+	c.AddFunc("21 17 * * *", func() { // manda artigos de devops e cloud
+		log.Println("Buscando rtigos de Devops e Cloud")
 		article, err := articles.FetchArticles("devops,aws,azure,gcp,docker,kubernetes,terraform,ansible,githubactions,cicd,prometheus,grafana,observability,security,linux")
 		if err != nil {
 			log.Println("Erro ao buscar artigo: ", err)
@@ -59,4 +61,21 @@ func main() {
 			bot.ArticleSender(session, channelID, article)
 		}
 	})
+
+	c.Start() // inicia o agendador
+
+	log.Println("Agendador iniciado. Pressione Ctrl+C para sair.")
+
+	sc := make(chan os.Signal, 1)
+
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM)
+
+	// Bloqueia a main
+	<-sc
+
+	log.Println("Desligando o bot...")
+
+	c.Stop() // Para o agendador
+
+	log.Println("Bot desligado.")
 }
