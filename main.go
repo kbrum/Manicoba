@@ -66,12 +66,12 @@ func main() {
 
 	log.Println("Agendador iniciado. Pressione Ctrl+C para sair.")
 
-	sc := make(chan os.Signal, 1)
+	channel := make(chan os.Signal, 1)
 
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(channel, syscall.SIGINT, syscall.SIGTERM)
 
 	// Bloqueia a main
-	<-sc
+	<-channel
 
 	log.Println("Desligando o bot...")
 
