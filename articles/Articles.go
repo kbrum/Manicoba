@@ -52,31 +52,3 @@ func FetchArticles(tags string) (Article, error) {
 
 	return articles[0], nil
 }
-
-// FetchMorningNews Noticias que serão mandadas as 9 horas (assuntos frontend)
-func FetchMorningNews() (Article, error) {
-	// faz a solicitação para o endpoint e faz o tratamento de erros
-	article, err := FetchArticles("https://dev.to/api/articles?tags=javascript,typescript,react,nextjs,vue,angular,svelte,tailwindcss,vite&top=1")
-	if err != nil {
-		return Article{}, err
-	}
-	return article, nil
-}
-
-// FetchAfternoonNews Noticias que serão mandadas as 14 horas (assuntos backend)
-func FetchAfternoonNews() (Article, error) {
-	article, err := FetchArticles("https://dev.to/api/articles?tags=node,python,go,java,rust,springboot,django,fastapi,laravel,graphql,postgres,redis,backend,architecture")
-	if err != nil {
-		return Article{}, err
-	}
-	return article, nil
-}
-
-// FetchNightNews Noticias que serão mandadas as 19 horas (assuntos devops/cloud)
-func FetchNightNews() (Article, error) {
-	article, err := FetchArticles("https://dev.to/api/articles?tags=devops,aws,azure,gcp,docker,kubernetes,terraform,ansible,githubactions,cicd,prometheus,grafana,observability,security,linux")
-	if err != nil {
-		return Article{}, err
-	}
-	return article, nil
-}
