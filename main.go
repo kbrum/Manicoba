@@ -52,7 +52,7 @@ func main() {
 		}
 	})
 
-	c.AddFunc("21 17 * * *", func() { // manda artigos de devops e cloud
+	c.AddFunc("0 18 * * *", func() { // manda artigos de devops e cloud
 		log.Println("Buscando rtigos de Devops e Cloud")
 		article, err := articles.FetchArticles("devops,aws,azure,gcp,docker,kubernetes,terraform,ansible,githubactions,cicd,prometheus,grafana,observability,security,linux")
 		if err != nil {
