@@ -8,7 +8,7 @@ import (
 )
 
 // Article Mapeamento do dados do json para a struct
-type Article struct {
+type Article *struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	URL         string `json:"url"`
@@ -21,7 +21,7 @@ func FetchArticles(tags string) (Article, error) {
 	//Faz a solicitação http
 	resp, err := http.Get("https://dev.to/api/articles?tags=" + tags + "&top=1")
 	if err != nil {
-		return Article{}, err
+		return nil, err
 	}
 
 	// Fecha a conexão com o endpoint no final da função
@@ -29,25 +29,25 @@ func FetchArticles(tags string) (Article, error) {
 
 	// trata codigos http diferentes de 200
 	if resp.StatusCode != 200 {
-		return Article{}, errors.New("http error: " + resp.Status)
+		return nil, errors.New("http error: " + resp.Status)
 	}
 
 	// Acessa os dados da response e guarda na na slice do tipo []byte
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return Article{}, err
+		return nil, err
 	}
 
 	// Faz o unmarshal do bodyBytes, salva na struct, e trata possiveis erros
 	var articles []Article
 	err = json.Unmarshal(bodyBytes, &articles)
 	if err != nil {
-		return Article{}, err
+		return nil, err
 	}
 
 	// tratamento para retorno de 0 artigos
 	if len(articles) == 0 {
-		return Article{}, errors.New("articles not found")
+		return nil, errors.New("articles not found")
 	}
 
 	return articles[0], nil
